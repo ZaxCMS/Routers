@@ -1,0 +1,17 @@
+{
+    "name": "zaxcms/routers",
+    "type": "library",
+    "description": "Helpers for routers in Nette Framework",
+    "licence": ["MIT"],
+    "require": {
+        "php": ">=5.4.0",
+        "nette/application": ">=2.2.0"
+    },
+    "require-dev": {
+        "nette/tester": "~1.3",
+        "nette/nette": "~2.2"
+    },
+    "autoload": {
+        "classmap": ["src/"]
+    }
+}
