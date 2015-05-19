@@ -50,6 +50,28 @@ $router[] = new Route('/test-boolean[/<details>]', $meta);
 
 Calling URL `/test-boolean/details` will set parameter `some-deep-control-showDetails` to `TRUE`.
 
+Array parameters
+----------------
+
+By default, Nette works with array persistent params by making a special param in URL *for every value*.
+This behavior can quickly clutter the URL, especially when using components. Fortunately, this library can turn
+
+```/test-array?some-deep-control-selected[]=1&some-deep-control-selected[]=5&some-deep-control-selected[]=10```
+
+into
+
+```/test-array?selected=1+5+10```
+
+like this
+
+```php
+$meta = (new MetadataBuilder($default))
+	->addAlias('selected', 'some-deep-control-selected')
+	->addArrayParam('selected', '+') // second parameter (delimiter) is optional, ',' is default
+	->build();
+$router[] = new Route('/test-array', $meta);
+```
+
 Working with Multiplier
 -----------------------
 

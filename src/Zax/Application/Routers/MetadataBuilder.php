@@ -20,6 +20,9 @@ class MetadataBuilder extends Object {
 	/** @var array */
 	private $booleanParams = [];
 
+	/** @var array */
+	private $arrayParams = [];
+
 	/**
 	 * @param string|array $presenter or $metadata
 	 * @param string|NULL $action or NULL if using metadata
@@ -64,6 +67,15 @@ class MetadataBuilder extends Object {
 	 */
 	public function addBooleanParam($param) {
 		$this->booleanParams[] = $param;
+		return $this;
+	}
+
+	/**
+	 * @param string $param
+	 * @return $this
+	 */
+	public function addArrayParam($param, $delimiter = ',') {
+		$this->arrayParams[$param] = $delimiter;
 		return $this;
 	}
 
@@ -159,7 +171,7 @@ class MetadataBuilder extends Object {
 	 * @param array $boolParams
 	 * @return array
 	 */
-	private function createMetadata(array $metadata, $aliases = [], $doAliases = [], $boolParams = []) {
+	private function createMetadata(array $metadata, $aliases = [], $doAliases = [], $boolParams = [], $arrayParams = []) {
 		if(count($aliases) + count($doAliases) > 0) {
 			$metadata[NULL] = $this->createAliases($aliases, $doAliases);
 		}
@@ -177,6 +189,21 @@ class MetadataBuilder extends Object {
 			}
 		}
 
+		if(count($arrayParams) > 0) {
+			foreach($arrayParams as $param => $delimiter) {
+				$metadata[$param] = [
+					Route::FILTER_IN => function($value) use ($delimiter) {
+						return array_map(function($singleValue) {
+							return is_numeric($singleValue) ? $singleValue + 0 : $singleValue;
+						}, explode($delimiter, $value));
+					},
+					Route::FILTER_OUT => function($value) use ($delimiter) {
+						return implode($delimiter, $value);
+					}
+				];
+			}
+		}
+
 		return $metadata;
 	}
 
@@ -184,7 +211,7 @@ class MetadataBuilder extends Object {
 	 * @return array
 	 */
 	public function build() {
-		return $this->createMetadata($this->metadata, $this->aliases, $this->doAliases, $this->booleanParams);
+		return $this->createMetadata($this->metadata, $this->aliases, $this->doAliases, $this->booleanParams, $this->arrayParams);
 	}
 
 }

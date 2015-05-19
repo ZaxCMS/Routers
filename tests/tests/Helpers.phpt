@@ -38,6 +38,14 @@ class HelpersTest extends Tester\TestCase {
 		$p = $this->urlToParams('/test-alias-boolean');
 		Assert::false(isset($p['some-deep-control-showDetails']));
 
+		// test array params
+		$p = $this->urlToParams('/test-alias-array/1,2,3,4,5');
+		Assert::equal([1, 2, 3, 4, 5], $p['some-deep-control-filterBrands']);
+		$p = $this->urlToParams('/test-alias-array/a,b,c,d');
+		Assert::equal(['a', 'b', 'c', 'd'], $p['some-deep-control-filterBrands']);
+		$p = $this->urlToParams('/test-alias-array-delimiter/1+2+3+4+5');
+		Assert::equal([1, 2, 3, 4, 5], $p['some-deep-control-filterBrands']);
+
 		// test multiplier
 		$p = $this->urlToParams('/test-multiplier/page-10/item-8/view-edit');
 		Assert::equal('10', $p['list-paginator-page']);

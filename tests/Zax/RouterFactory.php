@@ -29,6 +29,20 @@ class RouterFactory {
 			->build();
 		$router[] = new Route('/test-alias-boolean[/<details>]', $meta);
 
+		// test array
+		$meta = self::meta('Default', 'default')
+			->addAlias('brands', 'some-deep-control-filterBrands')
+			->addArrayParam('brands')
+			->build();
+		$router[] = new Route('/test-alias-array[/<brands>]', $meta);
+
+		// test array delimiter
+		$meta = self::meta('Default', 'default')
+			->addAlias('brands', 'some-deep-control-filterBrands')
+			->addArrayParam('brands', '+')
+			->build();
+		$router[] = new Route('/test-alias-array-delimiter[/<brands>]', $meta);
+
 		// test multiplier
 		$meta = self::meta('Default', 'default')
 			->addAlias('page', 'list-paginator-page')
