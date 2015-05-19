@@ -56,11 +56,15 @@ Array parameters
 By default, Nette works with array persistent params by making a special param in URL *for every value*.
 This behavior can quickly clutter the URL, especially when using components. Fortunately, this library can turn
 
-```/test-array?some-deep-control-selected[]=1&some-deep-control-selected[]=5&some-deep-control-selected[]=10```
+```
+/test-array?some-deep-control-selected[]=1&some-deep-control-selected[]=5&some-deep-control-selected[]=10
+```
 
 into
 
-```/test-array?selected=1+5+10```
+```
+/test-array?selected=1+5+10
+```
 
 like this
 
